@@ -1,0 +1,11 @@
+{
+  "name": "@contextquarantine/cli",
+  "version": "0.1.0",
+  "description": "CLI for quarantining and promoting AI-agent memory candidates.",
+  "type": "module",
+  "bin": { "context-quarantine": "./dist/index.js" },
+  "main": "./dist/index.js",
+  "files": ["dist"],
+  "scripts": { "build": "tsc -p tsconfig.build.json" },
+  "dependencies": { "@contextquarantine/core": "workspace:*" }
+}

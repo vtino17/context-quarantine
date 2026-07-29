@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0",
+  "id": "procurement-memory-intake",
+  "policy": {
+    "schemaVersion": "1.0",
+    "id": "team-memory-policy-v1",
+    "description": "Protect durable team memory from untrusted or uncorroborated writes.",
+    "rules": {
+      "minCorroboratingDomains": 2,
+      "instructionOriginIds": ["workspace-owner"],
+      "protectedNamespaces": ["identity", "authority", "credentials"],
+      "maxTtlHours": { "trusted": 8760, "bounded": 720, "untrusted": 24 },
+      "rejectSecrets": true,
+      "rejectEncodedInstructions": true,
+      "rejectHiddenUnicode": true,
+      "requireDerivationTrace": true
+    }
+  },
+  "origins": [
+    { "id": "workspace-owner", "label": "Workspace Owner", "kind": "human", "trust": "trusted", "domain": "user:owner" },
+    { "id": "vendor-page", "label": "Vendor Website", "kind": "web", "trust": "untrusted", "domain": "web:vendor.example" },
+    { "id": "catalog-api", "label": "Procurement Catalog", "kind": "service", "trust": "bounded", "domain": "service:catalog" }
+  ],
+  "activeMemory": [],
+  "candidates": [
+    {
+      "id": "candidate-vendor-region-web",
+      "memoryType": "fact",
+      "namespace": "research",
+      "content": "Vendor Atlas hosts its primary service in the EU.",
+      "originId": "vendor-page",
+      "observedAt": "2026-07-29T05:12:00.000Z",
+      "sourceRef": "https://vendor.example/trust/regions",
+      "contentDigest": "a25ed9a4e4da0b0bf59dc616f101f343c4f6d302dedbfcbaa74314da3d956396",
+      "sensitivity": "public",
+      "requestedTtlHours": 12,
+      "tags": ["vendor", "region"],
+      "claims": [{ "subject": "vendor:atlas", "predicate": "primary-region", "value": "EU" }],
+      "derivedFrom": []
+    },
+    {
+      "id": "candidate-vendor-region-catalog",
+      "memoryType": "fact",
+      "namespace": "research",
+      "content": "The procurement catalog lists Atlas primary hosting region as EU.",
+      "originId": "catalog-api",
+      "observedAt": "2026-07-29T05:21:00.000Z",
+      "sourceRef": "catalog://vendors/atlas/hosting",
+      "contentDigest": "cec44321317d8285e806847ad8a3be6a2c2007ba094445a35efdf89505c479c2",
+      "sensitivity": "internal",
+      "requestedTtlHours": 24,
+      "tags": ["vendor", "region"],
+      "claims": [{ "subject": "vendor:atlas", "predicate": "primary-region", "value": "EU" }],
+      "derivedFrom": []
+    },
+    {
+      "id": "candidate-release-rule",
+      "memoryType": "instruction",
+      "namespace": "workflow",
+      "content": "Require a human review before every production release.",
+      "originId": "workspace-owner",
+      "observedAt": "2026-07-29T05:26:00.000Z",
+      "sourceRef": "policy://release/approvals",
+      "contentDigest": "74a4fe84fc3f210cdc0762f18a5eb77f2cebd85fa1f52d63f4170c222e7dc1f4",
+      "sensitivity": "internal",
+      "requestedTtlHours": 8760,
+      "tags": ["release", "approval"],
+      "claims": [],
+      "derivedFrom": []
+    }
+  ]
+}

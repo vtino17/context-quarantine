@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0",
+  "id": "team-memory-policy-weakened",
+  "description": "An intentionally weakened policy used to test regression detection.",
+  "rules": {
+    "minCorroboratingDomains": 1,
+    "instructionOriginIds": ["workspace-owner", "summarizer"],
+    "protectedNamespaces": ["credentials"],
+    "maxTtlHours": { "trusted": 8760, "bounded": 720, "untrusted": 720 },
+    "rejectSecrets": false,
+    "rejectEncodedInstructions": false,
+    "rejectHiddenUnicode": false,
+    "requireDerivationTrace": false
+  }
+}

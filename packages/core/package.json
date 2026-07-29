@@ -1,0 +1,10 @@
+{
+  "name": "@contextquarantine/core",
+  "version": "0.1.0",
+  "description": "Deterministic memory-admission policy engine.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": { "build": "tsc -p tsconfig.build.json" }
+}

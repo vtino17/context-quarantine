@@ -1,0 +1,24 @@
+name: Feature request
+description: Propose a policy control, adapter, or workflow.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: threat
+    attributes:
+      label: Memory threat
+      description: Which failure or attack should this address?
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Proposed deterministic behavior
+    validations:
+      required: true
+  - type: textarea
+    id: assumptions
+    attributes:
+      label: Trust assumptions
+    validations:
+      required: true

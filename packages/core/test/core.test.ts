@@ -155,4 +155,24 @@ describe("schema validation", () => {
     expect(paths).toContain("origins");
     expect(paths).toContain("candidates[0].requestedTtlHours");
   });
+
+  it.each([Number.NaN, Number.POSITIVE_INFINITY])(
+    "rejects non-finite requested TTL values (%s)",
+    (requestedTtlHours) => {
+      const bundle = createSafeBundle(now);
+      bundle.candidates[0]!.requestedTtlHours = requestedTtlHours;
+      expect(validateBundle(bundle).map((entry) => entry.path))
+        .toContain("candidates[0].requestedTtlHours");
+    },
+  );
+
+  it.each([Number.NaN, Number.POSITIVE_INFINITY])(
+    "rejects non-finite policy TTL caps (%s)",
+    (untrusted) => {
+      const bundle = createSafeBundle(now);
+      bundle.policy.rules.maxTtlHours.untrusted = untrusted;
+      expect(validateBundle(bundle).map((entry) => entry.path))
+        .toContain("policy.rules.maxTtlHours");
+    },
+  );
 });

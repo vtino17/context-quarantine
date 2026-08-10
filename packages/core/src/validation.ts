@@ -46,7 +46,8 @@ export function validateBundle(value: unknown): ValidationIssue[] {
       for (const field of ["instructionOriginIds", "protectedNamespaces"] as const) {
         if (!isStringArray(rules[field])) issues.push({ path: `policy.rules.${field}`, message: "Must be an array of strings." });
       }
-      if (!isObject(rules.maxTtlHours) || ![rules.maxTtlHours?.trusted, rules.maxTtlHours?.bounded, rules.maxTtlHours?.untrusted].every((entry) => typeof entry === "number" && entry > 0)) {
+      if (!isObject(rules.maxTtlHours) || ![rules.maxTtlHours?.trusted, rules.maxTtlHours?.bounded, rules.maxTtlHours?.untrusted].every((entry) =>
+        typeof entry === "number" && Number.isFinite(entry) && entry > 0)) {
         issues.push({ path: "policy.rules.maxTtlHours", message: "Must define positive trusted, bounded, and untrusted limits." });
       }
       for (const field of ["rejectSecrets", "rejectEncodedInstructions", "rejectHiddenUnicode", "requireDerivationTrace"] as const) {
@@ -88,7 +89,11 @@ export function validateBundle(value: unknown): ValidationIssue[] {
       if (!memoryTypes.has(candidate.memoryType as MemoryType)) issues.push({ path: `${path}.memoryType`, message: "Unknown memory type." });
       if (!sensitivities.has(candidate.sensitivity as Sensitivity)) issues.push({ path: `${path}.sensitivity`, message: "Unknown sensitivity." });
       if (!isDate(candidate.observedAt)) issues.push({ path: `${path}.observedAt`, message: "Must be an ISO date." });
-      if (typeof candidate.requestedTtlHours !== "number" || candidate.requestedTtlHours <= 0) issues.push({ path: `${path}.requestedTtlHours`, message: "Must be positive." });
+      if (
+        typeof candidate.requestedTtlHours !== "number"
+        || !Number.isFinite(candidate.requestedTtlHours)
+        || candidate.requestedTtlHours <= 0
+      ) issues.push({ path: `${path}.requestedTtlHours`, message: "Must be positive." });
       for (const field of ["tags", "derivedFrom"] as const) {
         if (!isStringArray(candidate[field])) issues.push({ path: `${path}.${field}`, message: "Must be an array of strings." });
       }
